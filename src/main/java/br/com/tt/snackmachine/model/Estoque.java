@@ -9,4 +9,11 @@ public class Estoque {
         this.quantidade = q;
     }
 
+    public int getQuantidade(){
+        return this.quantidade;
+    }
+
+    public Produto getProduto(){
+        return this.produto;
+    }
 }

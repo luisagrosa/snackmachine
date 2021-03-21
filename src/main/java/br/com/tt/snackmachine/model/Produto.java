@@ -1,6 +1,6 @@
 package br.com.tt.snackmachine.model;
 
-public class Produto {
+public class Produto implements Comparable<Produto>{
     private Short id;
     private Float preco;
     private String descricao;
@@ -29,6 +29,16 @@ public class Produto {
         return id;
     }
 
+    public String getDescricaoCompleta(){
+        return String.format("%d -  %s, categoria %s ,por R$%.2f", id, descricao, categoria, preco);
+    }
+
+    public int compareTo(Produto p1) throws  IllegalArgumentException{
+        if(this.id == null || p1.id == null || p1 == null){
+            throw new IllegalArgumentException("Não podem haver produtos com ID nulo");
+        }
+    return this.id.compareTo(p1.id);
+    }
 
 
 }
