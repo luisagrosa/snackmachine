@@ -37,36 +37,10 @@ public class Aplicacao {
     private static int pedeNumeroItem() {
         System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
         int produtoDesejado = retornarIntDeIDDeProdutoDisponivel();
-        //System.out.println(produtoDesejado);
         return produtoDesejado;
 
         }
-    /*
-    private static int pedeNumeroItem() {
-        System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
-        try {
-            int sc = new Scanner(System.in).nextInt();
-            if(sc == 0) {
-                mostrarProdutosParaUsuario(); //PORQUE DIABBOS ELE PARA DE RODAR O PROGRAMA TODO
-            }
 
-            while (sc < 0 || sc != produtosDisponiveis.size()) {
-                System.out.printf("Numero Invalido. Numeros negativos nao existem na nossa maquina " +
-                        "e numeros maiores do que %d nao temos", produtosDisponiveis.size());
-                System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
-                sc = new Scanner(System.in).nextInt();
-            }
-            return sc;
-        }
-        catch(InputMismatchException e) {
-            System.out.println("Precisa digitar um numero! Digite novamente");
-            //continue. Como voltar pro inicio do try?? Nao quero dar aquele return no fim?? TODO
-            pedeNumeroItem();
-        }
-            return 1;
-        }
-
-*/
 
 
 
@@ -112,6 +86,11 @@ public class Aplicacao {
         try {
             sc = new Scanner(System.in).nextInt();
         }
+
+        //eu queria poder voltar pro inicio do try caso desse essa exceção... como faz isso?? Instintivamente eu chamaria de novo
+        //esse propprio metodo, mas nao pode ne ? porque fica "recursivo". Tem um jeito de voltar pro try ou pro inicio desse metodo
+        // depois de informar o usuario no catch que ele tem que digitar um numero e nao uma letra ??? TODO
+
         catch(InputMismatchException e) {
             System.out.println("Você não digitou um numero. Você precisa digitar um NÚMERO de algum produto disponível.");
             pedeNumeroItem();
@@ -120,7 +99,10 @@ public class Aplicacao {
             System.out.println("Você digitou um número negativo. Você precisa digitar um número de algum produto disponível");
             pedeNumeroItem();
         }
-
+        if(sc == 0) {
+            mostrarProdutosParaUsuario();
+            pedeNumeroItem();
+        }
         if(idsDisponiveis.contains(Integer.valueOf(sc))) {
             return sc; }
         else {
@@ -129,9 +111,10 @@ public class Aplicacao {
                 System.out.print(i + ",");
             }
             pedeNumeroItem();
-        } // por que as vezes eu ponho um id que existe e mesmo assim ele retorna que nao!
+        } // por que as vezes eu ponho um id que existe e mesmo assim ele entende que nao existe?? TODO
 
         return sc;
     }
 
 }
+
