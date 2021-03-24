@@ -10,6 +10,7 @@ public class Aplicacao {
     private static Set<Produto> produtosDisponiveis = new TreeSet<>();
     private static List<Estoque> estoqueDeProdutos;
     private static int produtoDesejadofinal;
+    private static final Scanner SCANNER = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -39,7 +40,6 @@ public class Aplicacao {
 
 
     private static int pedeNumeroItem() {
-        System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
         int produtoDesejado = retornarIntDeIDDeProdutoDisponivel();
 
         System.out.println("o produtoDesejado ficou com valor de:" + produtoDesejado);
@@ -81,6 +81,8 @@ public class Aplicacao {
 
 
     private static int retornarIntDeIDDeProdutoDisponivel() {
+        System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
+
         List<Integer> idsDisponiveis = new ArrayList<>();
         for (Produto p : produtosDisponiveis) {
             idsDisponiveis.add(p.getId().intValue());
@@ -88,14 +90,15 @@ public class Aplicacao {
 
 
         try {
-           int sc = new Scanner(System.in).nextInt();
+           String stringSc = SCANNER.nextLine();
+            int sc = Integer.valueOf(stringSc);
             if (sc < 0) {
                 System.out.println("Você digitou um número negativo. Você precisa digitar um número de algum produto disponível");
-                pedeNumeroItem();
+                return retornarIntDeIDDeProdutoDisponivel();
             }
             if (sc == 0) {
                 mostrarProdutosParaUsuario();
-                pedeNumeroItem();
+                return retornarIntDeIDDeProdutoDisponivel();
             }
 
             if (!idsDisponiveis.contains(Integer.valueOf(sc))) {
@@ -104,7 +107,7 @@ public class Aplicacao {
                 for (Integer i : idsDisponiveis) {
                     System.out.print(i + ",");
                 }
-                pedeNumeroItem(); // parece que todas as vezes que a gente chama esse método de novo,
+                return retornarIntDeIDDeProdutoDisponivel(); // parece que todas as vezes que a gente chama esse método de novo,
                 // ele "espera um resultado", entao por isso ele printa e retorna todos numeros que eu botei no console
             }
 
@@ -117,14 +120,11 @@ public class Aplicacao {
 
         catch (InputMismatchException e) {
             System.out.println("Você não digitou um numero. Você precisa digitar um NÚMERO de algum produto disponível.");
-            pedeNumeroItem();
+            return retornarIntDeIDDeProdutoDisponivel();
         }
 
-        return pedeNumeroItem();
+
     }
-
-
-
 
 
 
