@@ -9,16 +9,17 @@ public class Aplicacao {
 
     private static Set<Produto> produtosDisponiveis = new TreeSet<>();
     private static List<Estoque> estoqueDeProdutos;
-    private static int produtoDesejadofinal;
     private static final Scanner SCANNER = new Scanner(System.in);
+    private static Produto produtoDesejado;
+
 
     public static void main(String[] args) {
 
 
         criarProdutosEEstoqueInicial();
         mostrarProdutosParaUsuario();
-        pedeNumeroItem();
-        //solicitaPagamento(pedeNumeroItem());
+        //pedeNumeroItem();
+        solicitarPagamento(pedeNumeroItem());
         //dispensaProduto();
 
 
@@ -39,17 +40,26 @@ public class Aplicacao {
     }
 
 
-    private static int pedeNumeroItem() {
-        int produtoDesejado = retornarIntDeIDDeProdutoDisponivel();
-
-        System.out.println("o produtoDesejado ficou com valor de:" + produtoDesejado);
+    private static Produto pedeNumeroItem() {
+        int idDoProdutoDesejado = retornarIntDeIDDeProdutoDisponivel();
+        for(Produto p :produtosDisponiveis){
+            if(p.getId() == idDoProdutoDesejado){
+                produtoDesejado = p;
+            }
+        }
         return produtoDesejado;
+    }
 
+    private static Produto solicitarPagamento(Produto produtoDesejado){
+        System.out.printf("Preço do produto desejado: R$%.2f",
+                        produtoDesejado.getPreco());
+        System.out.println("\n Digite os 16 dígitos do cartão: ");
+        String numeroDoCartao = validarNumerodoCartao();
+        return produtoDesejado;
     }
 
 
     private static void criarProdutosEEstoqueInicial() {
-
 
         Produto doritos = new Produto((short) 1, 3F, "Doritos", CategoriaProduto.SALGADO);
         Produto cocaCola = new Produto((short) 2, 5F, "Coca", CategoriaProduto.BEBIDA);
@@ -79,6 +89,35 @@ public class Aplicacao {
 
     }
 
+    private static String validarNumerodoCartao(){
+       //try {
+        Scanner scanner = new Scanner(System.in);
+           String numeroDoCartaoValidado = scanner.nextLine();
+
+           while(numeroDoCartaoValidado.length() != 16 || !numeroDoCartaoValidado.matches("[0-9]+"))
+           {
+
+               if (!numeroDoCartaoValidado.matches("[0-9]+")) {
+                   System.out.printf("Você digitou %d dígitos e também digitou outros caractéres não-numericos. Precisa digitar os 16.",  numeroDoCartaoValidado.length());
+                   numeroDoCartaoValidado = scanner.nextLine();
+               }
+
+               System.out.printf("Você digitou %d dígitos. Precisa digitar exatamente 16.", numeroDoCartaoValidado.length());
+               numeroDoCartaoValidado = scanner.nextLine();
+
+           }
+
+           return numeroDoCartaoValidado;
+
+        //}
+
+        /* catch(InputMismatchException e) {
+           System.out.println("Você só pode digitar números. Digite os 16 números do seu cartão");
+           return validarNumerodoCartao();
+       }
+         */
+       }
+
 
     private static int retornarIntDeIDDeProdutoDisponivel() {
         System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
@@ -87,7 +126,6 @@ public class Aplicacao {
         for (Produto p : produtosDisponiveis) {
             idsDisponiveis.add(p.getId().intValue());
         }
-
 
         try {
            String stringSc = SCANNER.nextLine();
@@ -114,19 +152,14 @@ public class Aplicacao {
             return sc;
         }
 
-        //eu queria poder voltar pro inicio do try caso desse essa exceção... como faz isso?? Instintivamente eu chamaria de novo
-        //esse propprio metodo, mas nao pode ne ? porque fica "recursivo". Tem um jeito de voltar pro try ou pro inicio desse metodo
-        // depois de informar o usuario no catch que ele tem que digitar um numero e nao uma letra ??? TODO
-
-        catch (InputMismatchException e) {
-            System.out.println("Você não digitou um numero. Você precisa digitar um NÚMERO de algum produto disponível.");
+        catch (NumberFormatException e) {
+            System.out.println("Você não digitou um numero." +
+                    " Você precisa digitar um NÚMERO de algum produto disponível.");
             return retornarIntDeIDDeProdutoDisponivel();
         }
 
 
     }
-
-
 
 
 
