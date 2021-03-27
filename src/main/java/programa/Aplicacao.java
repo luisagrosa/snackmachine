@@ -18,8 +18,9 @@ public class Aplicacao {
 
         criarProdutosEEstoqueInicial();
         mostrarProdutosParaUsuario();
-        //pedeNumeroItem();
-        solicitarPagamento(pedeNumeroItem());
+        Produto produtoSelecionado = pedeNumeroItem();
+        //pedeNumeroItem__2();
+        solicitarPagamento(produtoSelecionado);
         //dispensaProduto();
 
 
@@ -163,21 +164,52 @@ public class Aplicacao {
 
 
 
-    private static int retornarIntDeIDDeProdutoDisponivel___2() {
-        List<Integer> idsDisponiveis = new ArrayList<>();
-        for (Produto p : produtosDisponiveis) {
-            idsDisponiveis.add(p.getId().intValue());
+
+    // ------- outras solucoes para pede numero item ---------
+
+    private static Produto pedeNumeroItem__2() {
+        int idDoProdutoDesejado = retornarIntDeIDDeProdutoDisponivel__2();
+        for(Produto p :produtosDisponiveis){
+            if(p.getId() == idDoProdutoDesejado){
+                produtoDesejado = p;
+            }
         }
-
-        Integer sc2 = new Scanner(System.in).nextInt();
-
-        while(!idsDisponiveis.contains(sc2)) {
-            System.out.println("\nDigite o numero do item que deseja. Se deseja ver o MENU novamente, digite 0\n");
-            sc2 = new Scanner(System.in).nextInt();
-
-        }
-        return sc2;
+        return produtoDesejado;
     }
 
-}
+
+    private static short retornarIntDeIDDeProdutoDisponivel__2() {
+        List<Short> idsDisponiveis = new ArrayList<>();
+        for (Produto p : produtosDisponiveis) {
+            idsDisponiveis.add(p.getId().shortValue());
+        }
+
+        short numeroEscolhido;
+        do {
+            System.out.println("\nDigite o numero do item que deseja.\n");
+            String sc2 = new Scanner(System.in).nextLine();
+            try {
+                numeroEscolhido = Short.valueOf(sc2);
+            } catch (NumberFormatException e) {
+                System.out.println("Informe um número!");
+                continue;
+            }
+
+            if(idsDisponiveis.contains(numeroEscolhido)) {
+                break;
+            }
+
+            System.out.println("Informe um numero válido de produto escolhido. São eles:");
+            for (Short s : idsDisponiveis) {
+                System.out.print(s + ", ");
+            }
+
+        } while (true);
+
+        return numeroEscolhido;
+
+        }
+    }
+
+
 
